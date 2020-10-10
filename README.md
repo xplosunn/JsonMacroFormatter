@@ -1,6 +1,6 @@
 # JsonMacroFormatter
 
-Scalafix rule to format json contained within [Circe](https://github.com/circe/circe) json literals. 
+[Scalafix](https://github.com/scalacenter/scalafix) rule to format json contained within [Circe](https://github.com/circe/circe) json literals. 
 
 E.g.
 
