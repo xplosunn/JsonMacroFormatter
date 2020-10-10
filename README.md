@@ -6,7 +6,7 @@ E.g.
 
 Before formatting:
 
-```
+```scala
 val obj = json"""{"key":"value"}"""
 
 val interpolatedObj =
@@ -15,7 +15,7 @@ val interpolatedObj =
 
 After formatting:
 
-```
+```scala
 val obj = json"""{
             "key" : "value"
           }"""
