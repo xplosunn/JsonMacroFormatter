@@ -1,8 +1,9 @@
 lazy val V = _root_.scalafix.sbt.BuildInfo
 inThisBuild(
   List(
+    version := "0.0.1",
     scalaVersion := V.scala212,
-    crossScalaVersions := List(V.scala213, V.scala212, V.scala211),
+    crossScalaVersions := List(V.scala213, V.scala212),
     organization := "com.github.xplosunn",
     homepage := Some(url("https://github.com/xplosunn/JsonMacroFormatter")),
     addCompilerPlugin(scalafixSemanticdb),
@@ -10,6 +11,16 @@ inThisBuild(
       "-Yrangepos",
       "-P:semanticdb:synthetics:on"
     ),
+    scmInfo := Some(
+      ScmInfo(
+        url("https://github.com/xplosunn/JsonMacroFormatter"),
+        "scm:git@github.com:xplosunn/JsonMacroFormatter.git"
+      )
+    ),
+    pomIncludeRepository := { _ => false },
+    publishTo := Some("releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2"),
+    publishMavenStyle := true,
+    credentials += Credentials(Path.userHome / ".sbt" / "sonatype_credentials")
   )
 )
 
