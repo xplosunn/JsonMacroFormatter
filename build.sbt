@@ -10,17 +10,13 @@ inThisBuild(
       "-Yrangepos",
       "-P:semanticdb:synthetics:on"
     ),
-    githubActor := "xplosunn",
-    version := "0.1.0",
-    githubOwner := "xplosunn",
-    githubRepository := "JsonMacroFormatter"
   )
 )
 
 skip in publish := true
 
 lazy val rules = project.settings(
-  moduleName := "scalafix",
+  moduleName := "JsonMacroFormatter",
   libraryDependencies ++= Seq(
     "ch.epfl.scala" %% "scalafix-core" % V.scalafixVersion,
     "io.circe" %% "circe-core" % "0.12.3",
