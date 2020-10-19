@@ -20,10 +20,12 @@ class JsonMacroFormatter extends SemanticRule("JsonMacroFormatter") {
     val visitedInterpolations = scala.collection.mutable.ListBuffer.empty[Term.Interpolate]
 
     def parentInterpolationVisited(t: Tree): Boolean =
-      t.parent match {
-        case Some(parent) => visitedInterpolations.contains(parent) || parentInterpolationVisited(parent)
-        case None => false
-      }
+      scala.util.Try {
+        t.parent match {
+          case Some(parent) => visitedInterpolations.contains(parent) || parentInterpolationVisited(parent)
+          case None => false
+        }
+      }.getOrElse(false)
 
     doc.tree.collect {
       case t@Term.Interpolate(Term.Name("json"), lits, terms) if !parentInterpolationVisited(t) =>
