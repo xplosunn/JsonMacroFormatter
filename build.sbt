@@ -5,7 +5,16 @@ inThisBuild(
     scalaVersion := V.scala212,
     crossScalaVersions := List(V.scala213, V.scala212),
     organization := "com.github.xplosunn",
+    licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
     homepage := Some(url("https://github.com/xplosunn/JsonMacroFormatter")),
+    developers := List(
+      Developer(
+        "xplosunn",
+        "Hugo Sousa",
+        "gi.ciberon@gmail.com",
+        url("https://github.com/xplosunn")
+      )
+    ),
     addCompilerPlugin(scalafixSemanticdb),
     scalacOptions ++= List(
       "-Yrangepos",
@@ -20,7 +29,6 @@ inThisBuild(
     pomIncludeRepository := { _ => false },
     publishTo := Some("releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2"),
     publishMavenStyle := true,
-    credentials += Credentials(Path.userHome / ".sbt" / "sonatype_credentials")
   )
 )
 
@@ -32,7 +40,7 @@ lazy val rules = project.settings(
     "ch.epfl.scala" %% "scalafix-core" % V.scalafixVersion,
     "io.circe" %% "circe-core" % "0.12.3",
     "io.circe" %% "circe-parser" % "0.12.3",
-  )
+  ),
 )
 
 lazy val input = project.settings(
