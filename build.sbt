@@ -1,7 +1,7 @@
 lazy val V = _root_.scalafix.sbt.BuildInfo
 inThisBuild(
   List(
-    version := "0.0.2",
+    version := "0.0.1",
     scalaVersion := V.scala212,
     crossScalaVersions := List(V.scala213, V.scala212),
     organization := "com.github.xplosunn",
