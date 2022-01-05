@@ -17,6 +17,11 @@ class JsonMacroFormatter extends SemanticRule("fix.JsonMacroFormatter") {
     }
   }
 
+  def indent(str: String, spaces: Int): String = {
+    val spacesStr = (0 until spaces).map(_ => " ").mkString
+    str.split('\n').map(spacesStr + _).mkString("\n")
+  }
+
   override def fix(implicit doc: SemanticDocument): Patch = {
     val visitedInterpolations = scala.collection.mutable.ListBuffer.empty[Term.Interpolate]
 
@@ -46,7 +51,7 @@ class JsonMacroFormatter extends SemanticRule("fix.JsonMacroFormatter") {
 
         _root_.io.circe.parser.parse(jsonWithReplacementsStr) match {
           case Right(json) =>
-            val formatted = json.spaces2.indent(t.pos.startColumn).trim
+            val formatted = indent(json.spaces2, t.pos.startColumn).trim
             val newJson = terms.foldLeft(formatted)((str, term) =>
               str.replaceFirstLiterally(("\"" + unlikelyToBeMatchedString + "\""), s"$${$term}")
             )
