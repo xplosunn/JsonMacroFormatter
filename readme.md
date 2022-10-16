@@ -30,7 +30,7 @@ val interpolatedObj =
 
 Add to `build.sbt`:
 
-`ThisBuild / scalafixDependencies += "com.github.xplosunn" %% "JsonMacroFormatter" % "0.0.6"`
+`ThisBuild / scalafixDependencies += "com.github.xplosunn" %% "JsonMacroFormatter" % "0.0.7"`
 
 Add to `.scalafix.conf`:
 

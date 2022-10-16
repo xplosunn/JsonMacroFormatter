@@ -55,7 +55,11 @@ class JsonMacroFormatter extends SemanticRule("fix.JsonMacroFormatter") {
             val newJson = terms.foldLeft(formatted)((str, term) =>
               str.replaceFirstLiterally(("\"" + unlikelyToBeMatchedString + "\""), s"$${$term}")
             )
-            Patch.replaceTree(t, "json\"\"\"" + newJson + "\"\"\"")
+            if (newJson.chars().anyMatch(c => c.equals('\n'.toInt) || c.equals('"'.toInt))) {
+              Patch.replaceTree(t, "json\"\"\"" + newJson + "\"\"\"")
+            } else {
+              Patch.replaceTree(t, "json\"" + newJson + "\"")
+            }
           case Left(error) =>
             Patch.empty
         }

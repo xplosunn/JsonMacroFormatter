@@ -5,6 +5,8 @@ import io.circe.literal._
 object Examples {
   val str = s"""{"key":"value"}"""
 
+  val jsonNum = json"1"
+
   val obj = json"""{
               "key" : "value"
             }"""
