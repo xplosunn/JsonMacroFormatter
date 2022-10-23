@@ -7,6 +7,8 @@ object Examples {
 
   val jsonNum = json"1"
 
+  val jsonStr = json""" "str" """
+
   val obj = json"""{
               "key" : "value"
             }"""
