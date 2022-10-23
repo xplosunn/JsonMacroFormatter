@@ -9,6 +9,10 @@ object Examples {
 
   val jsonStr = json""" "str" """
 
+  val jsonEmptyArray = json"""[]"""
+
+  val jsonEmptyObj = json"""{}"""
+
   val obj = json"""{
               "key" : "value"
             }"""

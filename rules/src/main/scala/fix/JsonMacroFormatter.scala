@@ -4,6 +4,7 @@ import scalafix.v1._
 
 import java.util.UUID
 import scala.meta._
+import _root_.io.circe.Json
 
 class JsonMacroFormatter extends SemanticRule("fix.JsonMacroFormatter") {
 
@@ -51,17 +52,32 @@ class JsonMacroFormatter extends SemanticRule("fix.JsonMacroFormatter") {
 
         _root_.io.circe.parser.parse(jsonWithReplacementsStr) match {
           case Right(json) =>
-            val formatted = indent(json.spaces2, t.pos.startColumn).trim
-            val newJson = terms.foldLeft(formatted)((str, term) =>
-              str.replaceFirstLiterally(("\"" + unlikelyToBeMatchedString + "\""), s"$${$term}")
-            )
-            if (newJson.startsWith("\"")) {
-              Patch.replaceTree(t, "json\"\"\" " + newJson + " \"\"\"")
-            } else if (newJson.chars().anyMatch(c => c.equals('\n'.toInt) || c.equals('"'.toInt))) {
-              Patch.replaceTree(t, "json\"\"\"" + newJson + "\"\"\"")
-            } else {
-              Patch.replaceTree(t, "json\"" + newJson + "\"")
+            def replaceReplacementStrings(json: Json): String = {
+              val formatted = indent(json.spaces2, t.pos.startColumn).trim
+              val newJson = terms.foldLeft(formatted)((str, term) =>
+                str.replaceFirstLiterally(("\"" + unlikelyToBeMatchedString + "\""), s"$${$term}")
+              )
+              newJson
             }
+
+            json.fold[Patch](
+              jsonNull = Patch.replaceTree(t, "json\"null\""),
+              jsonBoolean => Patch.replaceTree(t, "json\"" + json.spaces2 + "\""),
+              jsonNumber => Patch.replaceTree(t, "json\"" + json.spaces2 + "\""),
+              jsonString => Patch.replaceTree(t, "json\"\"\" " + json.spaces2 + " \"\"\""),
+              jsonArray =>
+                Patch.replaceTree(
+                  t,
+                  if (jsonArray.isEmpty) "json\"\"\"[]\"\"\""
+                  else ("json\"\"\"" + replaceReplacementStrings(json)) + "\"\"\"",
+                ),
+              jsonObject =>
+                Patch.replaceTree(
+                  t,
+                  if (jsonObject.isEmpty) "json\"\"\"{}\"\"\""
+                  else ("json\"\"\"" + replaceReplacementStrings(json)) + "\"\"\"",
+                ),
+            )
           case Left(error) =>
             Patch.empty
         }
