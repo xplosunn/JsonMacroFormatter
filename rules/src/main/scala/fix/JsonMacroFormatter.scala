@@ -55,7 +55,11 @@ class JsonMacroFormatter extends SemanticRule("fix.JsonMacroFormatter") {
             def replaceReplacementStrings(json: Json): String = {
               val formatted = indent(json.spaces2, t.pos.startColumn).trim
               val newJson = terms.foldLeft(formatted)((str, term) =>
-                str.replaceFirstLiterally(("\"" + unlikelyToBeMatchedString + "\""), s"$${$term}")
+                str.replaceFirstLiterally(
+                  ("\"" + unlikelyToBeMatchedString + "\""),
+                  if (term.toString().startsWith("{") && term.toString().endsWith("}")) s"$$$term"
+                  else s"$${$term}",
+                )
               )
               newJson
             }
