@@ -47,35 +47,35 @@ lazy val rules = project.settings(
 )
 
 lazy val input = project.settings(
-  skip in publish := true,
+  publish/skip := true,
   libraryDependencies ++= Seq(
-    "io.circe" %% "circe-core" % "0.13.0",
-    "io.circe" %% "circe-literal" % "0.13.0",
-    "org.typelevel" %% "jawn-parser" % "1.0.0",
+    "io.circe" %% "circe-core" % "0.14.7",
+    "io.circe" %% "circe-literal" % "0.14.7",
+    "org.typelevel" %% "jawn-parser" % "1.5.1",
   )
 )
 
 lazy val output = project.settings(
-  skip in publish := true,
+  publish/skip := true,
   libraryDependencies ++= Seq(
-    "io.circe" %% "circe-core" % "0.13.0",
-    "io.circe" %% "circe-literal" % "0.13.0",
-    "org.typelevel" %% "jawn-parser" % "1.0.0",
+    "io.circe" %% "circe-core" % "0.14.7",
+    "io.circe" %% "circe-literal" % "0.14.7",
+    "org.typelevel" %% "jawn-parser" % "1.5.1",
   )
 )
 
 lazy val tests = project
   .settings(
-    skip in publish := true,
+    publish/skip := true,
     libraryDependencies += "ch.epfl.scala" % "scalafix-testkit" % V.scalafixVersion % Test cross CrossVersion.full,
-    compile.in(Compile) :=
-      compile.in(Compile).dependsOn(compile.in(input, Compile)).value,
+    (Compile / compile) :=
+      (Compile/compile).dependsOn(input / Compile / compile).value,
     scalafixTestkitOutputSourceDirectories :=
-      sourceDirectories.in(output, Compile).value,
+      (output/ Compile / sourceDirectories).value,
     scalafixTestkitInputSourceDirectories :=
-      sourceDirectories.in(input, Compile).value,
+      (input / Compile /sourceDirectories).value,
     scalafixTestkitInputClasspath :=
-      fullClasspath.in(input, Compile).value
+      (input / Compile/ fullClasspath).value
   )
   .dependsOn(rules)
   .enablePlugins(ScalafixTestkitPlugin)
