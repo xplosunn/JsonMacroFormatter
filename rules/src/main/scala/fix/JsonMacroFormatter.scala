@@ -41,26 +41,30 @@ class JsonMacroFormatter extends SemanticRule("fix.JsonMacroFormatter") {
       case t @ Term.Interpolate(Term.Name("json"), lits, terms) if !parentInterpolationVisited(t) =>
         visitedInterpolations += t
 
-        val unlikelyToBeMatchedString =
+        def unlikelyToBeMatchedString =
           "temporary_replacement_string_" + UUID.randomUUID().toString.replace('-', '0') + UUID
             .randomUUID()
             .toString
             .replace('-', '0')
 
-        val jsonWithReplacementsStr =
-          lits.map(_.toString()).reduce(_ + s""""$unlikelyToBeMatchedString"""" + _)
+        val (str, replacementMap) = lits.drop(1).zip(terms).zipWithIndex.foldLeft(("", Map.empty[Term, String])){
+          case ((accStr, accMap), ((lit, term), i)) =>
+            val replacement = unlikelyToBeMatchedString
+            (accStr + s""""$replacement"""" + lit.toString(), accMap.updated(term, replacement))
+        }
+        val jsonWithReplacementsStr = lits.head.toString() + str
 
         _root_.io.circe.parser.parse(jsonWithReplacementsStr) match {
           case Right(json) =>
             def replaceReplacementStrings(json: Json): String = {
               val formatted = indent(json.spaces2, t.pos.startColumn).trim
-              val newJson = terms.foldLeft(formatted)((str, term) =>
+              val newJson = terms.foldLeft(formatted) { (str, term) =>
                 str.replaceFirstLiterally(
-                  ("\"" + unlikelyToBeMatchedString + "\""),
+                  ("\"" + replacementMap(term) + "\""),
                   if (term.toString().startsWith("{") && term.toString().endsWith("}")) s"$$$term"
                   else s"$${$term}",
                 )
-              )
+              }
               newJson
             }
 
