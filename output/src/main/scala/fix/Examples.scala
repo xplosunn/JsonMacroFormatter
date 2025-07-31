@@ -32,4 +32,18 @@ object Examples {
     json"""{
       "key3" : ${json"""{"key2": ${obj} }"""}
     }"""
+
+  val key1 = "a"
+  val key2 = "b"
+  val dynamicKeys =
+    json"""{
+      ${key1} : "x",
+      ${key2} : "y"
+    }"""
+
+  val dynamicVals =
+    json"""{
+      "x" : ${key1},
+      "y" : ${key2}
+    }"""
 }
