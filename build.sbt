@@ -41,26 +41,26 @@ lazy val rules = project.settings(
   publish / skip := false,
   libraryDependencies ++= Seq(
     "ch.epfl.scala" %% "scalafix-core" % V.scalafixVersion,
-    "io.circe" %% "circe-core" % "0.13.0",
-    "io.circe" %% "circe-parser" % "0.13.0",
+    "io.circe" %% "circe-core" % "0.14.14",
+    "io.circe" %% "circe-parser" % "0.14.14",
   ),
 )
 
 lazy val input = project.settings(
   publish/skip := true,
   libraryDependencies ++= Seq(
-    "io.circe" %% "circe-core" % "0.14.7",
-    "io.circe" %% "circe-literal" % "0.14.7",
-    "org.typelevel" %% "jawn-parser" % "1.5.1",
+    "io.circe" %% "circe-core" % "0.14.14",
+    "io.circe" %% "circe-literal" % "0.14.14",
+    "org.typelevel" %% "jawn-parser" % "1.6.0",
   )
 )
 
 lazy val output = project.settings(
   publish/skip := true,
   libraryDependencies ++= Seq(
-    "io.circe" %% "circe-core" % "0.14.7",
-    "io.circe" %% "circe-literal" % "0.14.7",
-    "org.typelevel" %% "jawn-parser" % "1.5.1",
+    "io.circe" %% "circe-core" % "0.14.14",
+    "io.circe" %% "circe-literal" % "0.14.14",
+    "org.typelevel" %% "jawn-parser" % "1.6.0",
   )
 )
 
